@@ -29,13 +29,14 @@ get(child(dbRef, 'clients/')).then((res) => {
         let myButton2 = document.createElement('button');
         let myButtonsRow = document.createElement('div');
         myButtonsRow.classList.add('buttons-section');
+        myButtonsRow.classList.add('mt-2');
+
         let myTableRow = document.createElement('tr');
         let myTableData1 = document.createElement('td');
         let myTableData2 = document.createElement('td');
         let myTableData3 = document.createElement('td');
         let myTableData4 = document.createElement('td');
         let myTableData5 = document.createElement('td');
-
         myTableData1.textContent = clientProjectList[i].id;
         myTableData2.textContent = clientProjectList[i].name;
         myTableData3.textContent = clientProjectList[i].email;
@@ -43,10 +44,10 @@ get(child(dbRef, 'clients/')).then((res) => {
         myTableData5.textContent = clientProjectList[i].projects.status;
         myButton.classList.add('buttons');
         myButton2.classList.add('update');
-        myButton.classList.add('btn');
-        myButton2.classList.add('btn');
-        myButton.classList.add('btn-dark');
-        myButton2.classList.add('btn-dark');
+        myButton.classList.add('button');
+        myButton2.classList.add('button');
+        myButton.classList.add('p-4');
+        myButton2.classList.add('p-4');
         myButtonsRow.appendChild(myButton);
         myButtonsRow.appendChild(myButton2);
         myTableRow.classList.add('table-row');
@@ -55,7 +56,6 @@ get(child(dbRef, 'clients/')).then((res) => {
         myTableRow.appendChild(myTableData3);
         myTableRow.appendChild(myTableData4);
         myTableRow.appendChild(myTableData5);
-
         myTable.appendChild(myTableRow);
         myButton.addEventListener('click', () => {
             const confirmDelete = window.confirm("Are you sure you want to delete this client?");
@@ -112,51 +112,89 @@ get(child(dbRef, 'clients/')).then((res) => {
         document.getElementById('input').classList.toggle('show');
         document.getElementById('input-form').classList.toggle('activate');
     }
+    // function storeClients() {
+    //     const clientRef = ref(database, `clients/${document.getElementById('id').value}`); // Reference using client id as key
+    //     // const client =
+    //     let idCheck = document.getElementById('id').value;
+    //     if (idArr.length === 0) {
+    //         set(clientRef, {
+    //             "name": document.getElementById('name').value,
+    //             "email": document.getElementById('mail').value,
+    //             "projects": {
+    //                 "name": document.getElementById('building').value,
+    //                 "status": document.getElementById('tracking').value
+    //             },
+    //             "id": idCheck
+
+    //         }).then(() => {
+    //             window.location.reload();
+    //             console.log("Client added successfully.");
+    //         }).catch((error) => {
+    //             console.error("Error adding client: ", error);
+    //         });
+    //     }
+    //     else {
+    //         idArr.forEach((value) => {
+    //             if (value == idCheck) {
+    //                 alert('Id is already defined');
+    //                 return;
+    //             } else {
+    //                 set(clientRef, {
+    //                     "name": document.getElementById('name').value,
+    //                     "email": document.getElementById('mail').value,
+    //                     "projects": {
+    //                         "name": document.getElementById('building').value,
+    //                         "status": document.getElementById('tracking').value
+    //                     },
+    //                     "id": idCheck
+
+    //                 }).then(() => {
+    //                     window.location.reload();
+    //                     console.log("Client added successfully.");
+    //                 }).catch((error) => {
+    //                     console.error("Error adding client: ", error);
+    //                 });
+    //             }
+    //         })
+    //     }
+    // }
     function storeClients() {
         const clientRef = ref(database, `clients/${document.getElementById('id').value}`); // Reference using client id as key
-        // const client =
         let idCheck = document.getElementById('id').value;
+        let idExists = false;
         if (idArr.length === 0) {
-            set(clientRef, {
-                "name": document.getElementById('name').value,
-                "email": document.getElementById('mail').value,
-                "projects": {
-                    "name": document.getElementById('building').value,
-                    "status": document.getElementById('tracking').value
-                },
-                "id": idCheck
-
-            }).then(() => {
-                window.location.reload();
-                console.log("Client added successfully.");
-            }).catch((error) => {
-                console.error("Error adding client: ", error);
-            });
-        }
-        else {
+            adding(clientRef, idCheck);
+        } else {
             idArr.forEach((value) => {
                 if (value == idCheck) {
-                    alert('Id is already defined');
-                } else {
-                    set(clientRef, {
-                        "name": document.getElementById('name').value,
-                        "email": document.getElementById('mail').value,
-                        "projects": {
-                            "name": document.getElementById('building').value,
-                            "status": document.getElementById('tracking').value
-                        },
-                        "id": idCheck
-
-                    }).then(() => {
-                        window.location.reload();
-                        console.log("Client added successfully.");
-                    }).catch((error) => {
-                        console.error("Error adding client: ", error);
-                    });
+                    idExists = true;
                 }
-            })
+            });
+            if (idExists) {
+                alert('Id is already defined');
+                return;
+            } else {
+                adding(clientRef, idCheck);
+            }
         }
     }
+    function adding(clientRef, idCheck) {
+        set(clientRef, {
+            "name": document.getElementById('name').value,
+            "email": document.getElementById('mail').value,
+            "projects": {
+                "name": document.getElementById('building').value,
+                "status": document.getElementById('tracking').value
+            },
+            "id": idCheck
+        }).then(() => {
+            window.location.reload();
+            console.log("Client added successfully.");
+        }).catch((error) => {
+            console.error("Error adding client: ", error);
+        });
+    }
+
     document.getElementById('addClientBtn').addEventListener('click', addClient);
     document.getElementById('addButton').addEventListener('click', storeClients);
     document.getElementById('changeView').addEventListener('click', () => {

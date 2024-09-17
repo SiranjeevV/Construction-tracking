@@ -6,19 +6,25 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Client Details</title>
     <style>
+        * {
+            font-family: "Mitr", sans-serif;
+
+        }
+
         body {
-            font-family: Arial, sans-serif;
-            background-color: #f4f7fa;
+            background: linear-gradient(165deg, #ADBBDA, #EDE8F5);
             margin: 0;
             padding: 20px;
             display: flex;
             justify-content: center;
             align-items: center;
-            min-height: 100vh;
+            height: 100vh;
+            overflow: hidden;
         }
 
         #clientDetails {
-            background-color: #fff;
+
+            backdrop-filter: blur(10px);
             padding: 30px;
             border-radius: 8px;
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
@@ -59,7 +65,7 @@
             content: "";
             position: absolute;
             top: 20px;
-            border-bottom: 2px solid #ccc;
+            border-bottom: 2px solid #EDE8F5;
             width: 100%;
             z-index: 2;
         }
@@ -103,15 +109,24 @@
         }
 
         .stepper-item.completed .step-counter {
-            background-color: cadetblue;
+            background-color: #7091E6;
         }
 
         .stepper-item.active .step-counter {
-            background-color: teal;
+            background-color: #3D5280;
+        }
+
+        .stepper-item.completed ::before,
+        .stepper-item.completed ::after,
+        .stepper-item.active ::before,
+        .stepper-item.active ::after {
+
+            border-color: #7091E6;
+
         }
 
         .stepper-item.completed::after {
-            border-bottom: 2px solid teal;
+            border-bottom: 2px solid #3D5280;
         }
 
         /* Responsive adjustments */
@@ -211,7 +226,7 @@
             else if (status === "painting") {
                 j = 3;
             }
-            for (var i = 0; i < j; i++) {
+            for (var i = 0; i <= j; i++) {
                 stepperItems[i].classList.add('completed');
                 stepperItems[j].classList.add('active');
             }
