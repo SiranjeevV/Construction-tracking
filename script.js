@@ -1,15 +1,21 @@
+// Import the functions you need from the SDKs you need
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.1/firebase-app.js";
 import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.13.1/firebase-analytics.js";
+// TODO: Add SDKs for Firebase products that you want to use
+// https://firebase.google.com/docs/web/setup#available-libraries
+
+// Your web app's Firebase configuration
+// For Firebase JS SDK v7.20.0 and later, measurementId is optional
 const firebaseConfig = {
-    apiKey: "AIzaSyAp8ulWYf1T2XSPS07_NoTK8H01vNjqET8",
-    authDomain: "real-estate-tracking-8ca71.firebaseapp.com",
-    databaseURL: "https://real-estate-tracking-8ca71-default-rtdb.firebaseio.com",
-    projectId: "real-estate-tracking-8ca71",
-    storageBucket: "real-estate-tracking-8ca71.appspot.com",
-    messagingSenderId: "912329992919",
-    appId: "1:912329992919:web:430c109fcf02996df05e92",
-    measurementId: "G-FFBJ6X1ZS9"
+    apiKey: "AIzaSyCjw-U4bJe91x2trzVwrh62VCJARBPikUM",
+    authDomain: "hr-recruting-assit.firebaseapp.com",
+    projectId: "hr-recruting-assit",
+    storageBucket: "hr-recruting-assit.appspot.com",
+    messagingSenderId: "512326517035",
+    appId: "1:512326517035:web:bf1c1072a0ede6a3af456e",
+    measurementId: "G-722FV4VMQ4"
 };
+// Initialize Firebase
 const app = initializeApp(firebaseConfig);
 const analytics = getAnalytics(app);
 import { getDatabase, remove, ref, set, get, child, update } from "https://www.gstatic.com/firebasejs/10.13.1/firebase-database.js";
@@ -27,6 +33,8 @@ get(child(dbRef, 'clients/')).then((res) => {
         let myClassRow = document.createElement('div');
         let myButton = document.createElement('button');
         let myButton2 = document.createElement('button');
+        let myButton3 = document.createElement('button');
+
         let myButtonsRow = document.createElement('div');
         myButtonsRow.classList.add('buttons-section');
         myButtonsRow.classList.add('mt-2');
@@ -37,17 +45,28 @@ get(child(dbRef, 'clients/')).then((res) => {
         let myTableData3 = document.createElement('td');
         let myTableData4 = document.createElement('td');
         let myTableData5 = document.createElement('td');
+        let myTableData6 = document.createElement('td');
+
         myTableData1.textContent = clientProjectList[i].id;
         myTableData2.textContent = clientProjectList[i].name;
         myTableData3.textContent = clientProjectList[i].email;
-        myTableData4.textContent = clientProjectList[i].projects.name;
-        myTableData5.textContent = clientProjectList[i].projects.status;
+        myTableData4.textContent = clientProjectList[i].role;
+        myTableData5.textContent = clientProjectList[i].status;
+        myTableData6.textContent = clientProjectList[i].phone;
+
         myButton.classList.add('buttons');
         myButton2.classList.add('update');
+        myButton3.classList.add('sendMail');
+
         myButton.classList.add('button');
         myButton2.classList.add('button');
+        myButton3.classList.add('button');
+
         myButton.classList.add('p-4');
         myButton2.classList.add('p-4');
+        myButton3.classList.add('p-4');
+        myButton3.style.display = "none";
+
         myButtonsRow.appendChild(myButton);
         myButtonsRow.appendChild(myButton2);
         myTableRow.classList.add('table-row');
@@ -56,6 +75,8 @@ get(child(dbRef, 'clients/')).then((res) => {
         myTableRow.appendChild(myTableData3);
         myTableRow.appendChild(myTableData4);
         myTableRow.appendChild(myTableData5);
+        myTableRow.appendChild(myTableData6);
+
         myTable.appendChild(myTableRow);
         myButton.addEventListener('click', () => {
             const confirmDelete = window.confirm("Are you sure you want to delete this client?");
@@ -67,6 +88,14 @@ get(child(dbRef, 'clients/')).then((res) => {
                     });
             }
         });
+        if (clientProjectList[i].status == 'Selected') {
+            myButton3.style.display = "block";
+            myButton3.addEventListener('click', () => { selectedEmail(clientProjectList[i].email, clientProjectList[i].name) });
+        }
+        if (clientProjectList[i].status == 'Rejected') {
+            myButton3.style.display = "block";
+            myButton3.addEventListener('click', () => { rejectedEmail(clientProjectList[i].email, clientProjectList[i].name) });
+        }
         let myLink = document.createElement('a');
         myLink.href = `tracking.html?id=${recId}`;
         myLink.textContent = `View ${clientProjectList[i].name}'s Details`;
@@ -74,29 +103,38 @@ get(child(dbRef, 'clients/')).then((res) => {
         let second = document.createElement('strong');
         let third = document.createElement('strong');
         let four = document.createElement('strong');
+        let five = document.createElement('strong');
+
         myDiv.appendChild(myClassRow);
         myButton.innerText = "delete";
         myButton2.innerText = "update";
+        myButton3.innerText = "SEND MAIL";
+
         myClassRow.classList.add('col-lg-3');
         myClassRow.appendChild(four);
         myClassRow.appendChild(first);
         myClassRow.appendChild(second);
         myClassRow.appendChild(third);
+        myClassRow.appendChild(five);
         myClassRow.appendChild(myLink);
         myClassRow.appendChild(myButtonsRow);
+        myClassRow.appendChild(myButton3);
+
         const nameOfClient = clientProjectList[i].name;
         first.textContent = "name: " + nameOfClient;
         const mailOfClient = clientProjectList[i].email;
         second.textContent = "mail: " + mailOfClient;
-        third.textContent = "stage: " + clientProjectList[i].projects.status;
+        third.textContent = "stage: " + clientProjectList[i].status;
         four.textContent = "ID: " + recId;
+        five.textContent = "Ph No: " + clientProjectList[i].phone;
+
         myButton2.addEventListener('click', () => {
             document.getElementById('input-form').classList.toggle('activate');
             document.getElementById('input2').classList.toggle('show');
             document.getElementById('updateButton').addEventListener('click', () => {
-                const projectRef = ref(database, `clients/${i}/projects`);
+                const projectRef = ref(database, `clients/${i}`);
                 update(projectRef, {
-                    name: clientProjectList[i].projects.name,
+                    role: clientProjectList[i].role,
                     status: document.getElementById('tracking-updated').value
                 })
                     .then(data => {
@@ -182,11 +220,11 @@ get(child(dbRef, 'clients/')).then((res) => {
         set(clientRef, {
             "name": document.getElementById('name').value,
             "email": document.getElementById('mail').value,
-            "projects": {
-                "name": document.getElementById('building').value,
-                "status": document.getElementById('tracking').value
-            },
-            "id": idCheck
+            "role": document.getElementById('role').value,
+            "status": document.getElementById('tracking').value,
+            "id": idCheck,
+            "phone": document.getElementById('ph').value
+
         }).then(() => {
             window.location.reload();
             console.log("Client added successfully.");
