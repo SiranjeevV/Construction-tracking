@@ -33,7 +33,7 @@ get(child(dbRef, 'clients/')).then((res) => {
         let myClassRow = document.createElement('div');
         let myButton = document.createElement('button');
         let myButton2 = document.createElement('button');
-        let myButton3 = document.createElement('button');
+        // let myButton3 = document.createElement('button');
 
         let myButtonsRow = document.createElement('div');
         myButtonsRow.classList.add('buttons-section');
@@ -56,16 +56,16 @@ get(child(dbRef, 'clients/')).then((res) => {
 
         myButton.classList.add('buttons');
         myButton2.classList.add('update');
-        myButton3.classList.add('sendMail');
+        // myButton3.classList.add('sendMail');
 
         myButton.classList.add('button');
         myButton2.classList.add('button');
-        myButton3.classList.add('button');
+        // myButton3.classList.add('button');
 
         myButton.classList.add('p-4');
         myButton2.classList.add('p-4');
-        myButton3.classList.add('p-4');
-        myButton3.style.display = "none";
+        // myButton3.classList.add('p-4');
+        // myButton3.style.display = "none";
 
         myButtonsRow.appendChild(myButton);
         myButtonsRow.appendChild(myButton2);
@@ -88,14 +88,14 @@ get(child(dbRef, 'clients/')).then((res) => {
                     });
             }
         });
-        if (clientProjectList[i].status == 'Selected') {
-            myButton3.style.display = "block";
-            myButton3.addEventListener('click', () => { selectedEmail(clientProjectList[i].email, clientProjectList[i].name) });
-        }
-        if (clientProjectList[i].status == 'Rejected') {
-            myButton3.style.display = "block";
-            myButton3.addEventListener('click', () => { rejectedEmail(clientProjectList[i].email, clientProjectList[i].name) });
-        }
+        // if (clientProjectList[i].status == 'Selected') {
+        //     myButton3.style.display = "block";
+        //     myButton3.addEventListener('click', () => { selectedEmail(clientProjectList[i].email, clientProjectList[i].name) });
+        // }
+        // if (clientProjectList[i].status == 'Rejected') {
+        //     myButton3.style.display = "block";
+        //     myButton3.addEventListener('click', () => { rejectedEmail(clientProjectList[i].email, clientProjectList[i].name) });
+        // }
         let myLink = document.createElement('a');
         myLink.href = `tracking.html?id=${recId}`;
         myLink.textContent = `View ${clientProjectList[i].name}'s Details`;
@@ -108,7 +108,7 @@ get(child(dbRef, 'clients/')).then((res) => {
         myDiv.appendChild(myClassRow);
         myButton.innerText = "delete";
         myButton2.innerText = "update";
-        myButton3.innerText = "SEND MAIL";
+        // myButton3.innerText = "SEND MAIL";
 
         myClassRow.classList.add('col-lg-3');
         myClassRow.appendChild(four);
@@ -118,7 +118,7 @@ get(child(dbRef, 'clients/')).then((res) => {
         myClassRow.appendChild(five);
         myClassRow.appendChild(myLink);
         myClassRow.appendChild(myButtonsRow);
-        myClassRow.appendChild(myButton3);
+        // myClassRow.appendChild(myButton3);
 
         const nameOfClient = clientProjectList[i].name;
         first.textContent = "name: " + nameOfClient;
